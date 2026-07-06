@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+data/
+datasets/
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+*.h5
+*.zip
+*.rar
+.ipynb_checkpoints/

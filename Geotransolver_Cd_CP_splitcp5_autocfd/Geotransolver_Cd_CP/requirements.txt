@@ -1,0 +1,10 @@
+torch
+numpy
+matplotlib
+pandas
+scikit-learn
+trimesh
+pyvista
+seaborn
+jaxtyping
+physicsnemo

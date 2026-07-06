@@ -1,0 +1,11 @@
+gpytorch
+hydra-core
+pyvista
+scikit-learn
+tabulate
+tensorboard
+termcolor
+torchinfo
+einops
+tensorstore
+zarr>=3.0

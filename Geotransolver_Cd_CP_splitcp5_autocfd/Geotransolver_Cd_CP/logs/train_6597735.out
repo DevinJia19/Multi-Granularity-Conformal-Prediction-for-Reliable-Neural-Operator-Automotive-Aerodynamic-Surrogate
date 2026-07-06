@@ -1,0 +1,27 @@
+This job can be monitored from: https://job.c3se.chalmers.se/alvis/6597735
+[OK] Dependency check passed.
+[INFO] Step 1/2: split dataset ...
+读取CSV文件: /cephyr/users/chaoxi/Alvis/Desktop/mimer_naiss2025-23-604/Chao/PVT3/cfd-aero-pytorch/inputs/drivaer_ml/targets.csv
+总样本数: 484
+
+数据集分割结果 (8:1:1):
+  训练集:     387 样本 (80.0%)
+  校准集:      48 样本 (9.9%)
+  测试集:      49 样本 (10.1%)
+
+训练集保存到:   ./data_splits/train_split.csv
+校准集保存到:   ./data_splits/calibration_split.csv
+测试集保存到:   ./data_splits/test_split.csv
+
+训练集Average Cd 统计:
+  Min: 0.237005  Max: 0.340130  Mean: 0.277412  Std: 0.017581
+
+校准集Average Cd 统计:
+  Min: 0.244152  Max: 0.335115  Mean: 0.276971  Std: 0.017958
+
+测试集Average Cd 统计:
+  Min: 0.244468  Max: 0.316236  Mean: 0.277422  Std: 0.017338
+[INFO] TRAIN_CSV=./data_splits/train_split.csv
+[INFO] Launch training on 2 GPUs, NUM_WORKERS(per proc)=2, TOTAL_DATALOADER_WORKERS=4, OVERFIT_MODE=0, BATCH_SIZE=8, OVERFIT_SUBSET_SIZE=0, NUM_EPOCHS=1000, LR=5e-4, APPLY_AUGMENTATIONS=1, DETERMINISTIC_SAMPLING=0, DROPOUT=0.02, WEIGHT_DECAY=1e-6, USE_COSINE_SCHEDULER=0, STD_REG_WEIGHT=0.0, INTERVAL_WIDTH_WEIGHT=0.0, USE_AMP=0, PERSISTENT_WORKERS=1, PREFETCH_FACTOR=2, ENABLE_POINT_CACHE=0, POINT_CACHE_DIR=./cache/pointclouds, POINT_CACHE_VERSION=v1, ENABLE_MESH_CACHE=1, MESH_CACHE_DIR=./cache/meshes, MESH_CACHE_VERSION=v1 ...
+Warp DeprecationWarning: The symbol `warp.context.Device` will soon be removed from the public API. Use `warp.Device` instead.
+Warp DeprecationWarning: The symbol `warp.context.Device` will soon be removed from the public API. Use `warp.Device` instead.

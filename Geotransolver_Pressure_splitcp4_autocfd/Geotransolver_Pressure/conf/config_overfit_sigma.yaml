@@ -1,0 +1,23 @@
+# Single-sample sigma-head overfit sanity check (Step 1).
+# Usage:
+#   RUN_SPLIT=0 RUN_NORM=0 NPROC_PER_NODE=1 sbatch scripts/train.sh --config-name=config_overfit_sigma
+defaults:
+  - config
+
+run_id: debug/overfit_sigma_1sample
+
+training:
+  num_epochs: 500
+  save_interval: 50
+  debug_forward_io_stats: true
+  debug_one_step_loss: false
+  use_sigma_loss: true
+  sigma_loss_weight: 0.05
+  sigma_smooth_weight: 0.01
+
+data:
+  overfit_n_samples: 1
+  overfit_fixed_train_batch: true
+  overfit_use_train_for_val: true
+  overfit_fresh_start: true
+  overfit_deterministic_subsample: true

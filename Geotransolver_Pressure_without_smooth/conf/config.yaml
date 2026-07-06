@@ -1,0 +1,154 @@
+# GeoTransolver + residual scale head for normalized CP
+run_id: debug/geotransolver_sigma_multisample
+output_dir: runs
+checkpoint_dir: null
+precision: float32
+compile: false
+profile: false
+head_type: gp
+gp_warmup_start: 50
+gp_warmup_end: 60
+lambda_gp: 0.01
+lambda_consistency: 1.0
+consistency_every_n_steps: 1
+consistency_detach_transolver: false
+spectral_norm_embedding: true
+normalize_embeddings: true
+embedding_target_scale: 1.0
+embedding_pooling: attention
+n_inducing: 128
+embed_dim: 32
+embedding_feat_dim: 256
+gp_lengthscale_range:
+- 0.01
+- 1.0
+gp_lengthscale_prior: null
+gp_outputscale_prior: null
+gp_mlp_hidden: null
+mlp_head_hidden: null
+model:
+  _target_: geotransolver_sigma.GeoTransolverWithSigma
+  out_dim: 4
+  local_dim: 30
+  sigma_input: raw_local_mean
+  sigma_hidden: 128
+  sigma_layers: 3
+  init_sigma: 0.2
+  min_sigma: 1.0e-06
+  max_sigma: null
+  functional_dim: 30
+  global_dim: 6
+  geometry_dim: 3
+  embedding_dim: 30
+  backbone:
+    _target_: physicsnemo.experimental.models.geotransolver.GeoTransolver
+    functional_dim: 30
+    global_dim: 6
+    geometry_dim: 3
+    out_dim: 4
+    n_layers: 20
+    n_hidden: 256
+    dropout: 0.0
+    n_head: 8
+    act: gelu
+    mlp_ratio: 2
+    slice_num: 128
+    use_te: false
+    plus: false
+    include_local_features: true
+    radii:
+    - 0.05
+    - 0.25
+    - 1.0
+    - 2.5
+    neighbors_in_radius:
+    - 8
+    - 32
+    - 64
+    - 128
+    n_hidden_local: 32
+    concrete_dropout: false
+training:
+  num_epochs: 300
+  save_interval: 25
+  skip_validation: false
+  save_best_on_val: true
+  gradient_accumulation_steps: 1
+  lambda_reg: 0.0
+  simple_adamw_only: true
+  debug_one_step_loss: false
+  debug_forward_io_stats: false
+  use_legacy_transolver_forward: false
+  scheduler:
+    name: StepLR
+    params:
+      step_size: 50
+      gamma: 0.5
+  optimizer:
+    _target_: torch.optim.AdamW
+    lr: 0.0003
+    weight_decay: 0.0
+    betas:
+    - 0.9
+    - 0.999
+    eps: 1.0e-08
+  use_sigma_loss: true
+  sigma_loss_weight: 0.05
+  sigma_smooth_weight: 0.0
+  sigma_smooth_k: 8
+  sigma_smooth_max_points: 2048
+  sigma_eps: 1.0e-06
+  sigma_target_floor: 0.0001
+data:
+  mode: surface
+  normalization_dir: .
+  resolution: 1024
+  use_fourier_surface_embeddings: true
+  normalize_global_features: true
+  concat_embedding_to_fx: false
+  legacy_fx_embeddings_only: false
+  include_geometry: true
+  geometry_sampling: 10000
+  center_geometry_with_stl_com: true
+  overfit_n_samples: null
+  overfit_deterministic_subsample: false
+  overfit_fresh_start: true
+  overfit_use_train_for_val: false
+  overfit_fixed_train_batch: false
+  preload_depth: 0
+  pin_memory: true
+  return_mesh_features: false
+  volume_sample_from_disk: true
+  data_keys:
+  - surface_mesh_centers
+  - surface_normals
+  - surface_fields
+  - surface_areas
+  - stl_centers
+  - stl_areas
+  - stl_coordinates
+  - stl_faces
+  - global_params_reference
+  - global_params_values
+  train:
+    data_path: data_splits/train
+  calib:
+    data_path: data_splits/calib
+    # Split manifest only; datapipe does not use phase=calib. For CP inference override
+    # data.val.data_path to this path (keep inference.phase=val).
+  val:
+    data_path: data_splits/train
+    # Train-time val + default inference. For CP on calib/test: inference.phase=val and
+    # override data.val.data_path to data_splits/calib or data_splits/test.
+  test:
+    data_path: data_splits/test
+    # Split manifest only; override data.val.data_path for CP test inference.
+inference:
+  phase: val
+  # Only "train" and "val" are valid datapipe phases. CP: phase=val + data.val.data_path.
+cp_output:
+  save_pointwise_npz: false
+  subdir: null
+  note: inference_on_zarr.py saves physical pred/target/sigma (N,4) plus mesh features.
+    CP calib/test runs use inference.phase=val, override data.val.data_path, and set
+    cp_output.subdir (e.g. cp_pointwise_calib / cp_pointwise_test) to avoid overwriting.
