@@ -1,4 +1,4 @@
-# Conformal Prediction for Neural-Operator Automotive Aerodynamic Surrogates
+# Multi-Granularity Conformal Prediction for Reliable Neural-Operator Automotive Aerodynamic Surrogates
 
 This workspace contains the code used for the paper experiments on calibrated
 uncertainty quantification for neural-operator aerodynamic surrogate models on
