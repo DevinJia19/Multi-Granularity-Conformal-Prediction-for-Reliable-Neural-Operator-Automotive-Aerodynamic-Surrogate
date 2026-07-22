@@ -90,7 +90,7 @@ NPROC_PER_NODE="${NPROC_PER_NODE:-1}"
 MASTER_PORT="${MASTER_PORT:-29501}"
 
 # Choose a valid test CSV automatically unless user provided TEST_CSV.
-FULL_CSV_DEFAULT="/cephyr/users/chaoxi/Alvis/Desktop/mimer_naiss2025-23-604/Chao/PVT3/cfd-aero-pytorch/inputs/drivaer_ml/targets.csv"
+FULL_CSV_DEFAULT="/path/to/dataset/targets.csv"
 if [[ -z "${TEST_CSV:-}" ]]; then
     if [[ -f "./data_splits/test_split.csv" ]]; then
         TEST_CSV="./data_splits/test_split.csv"
